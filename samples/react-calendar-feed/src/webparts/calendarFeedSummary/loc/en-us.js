@@ -30,6 +30,7 @@ define([], function() {
     DateRangeOptionQuarter: "Next quarter",
     UseCORSFieldLabel: "Use proxy",
     HideShowPreviousNextButtonsLabel: "Hide or Show Navigation",
+    HideShowSeeAllLinkLabel: "Hide or Show 'See All' Link",
     UseCORSFieldCallout: "Enable this option if you get a CORS message",
     UseCORSFieldCalloutDisabled: "This option is disabled when using the Mock provider",
     CORSOn: "On",

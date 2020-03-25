@@ -22,6 +22,8 @@ export interface ICalendarFeedSummaryProps {
   isNarrow: boolean;
   provider: ICalendarService;
   maxEvents: number;
+  seeAllLinkText: string;
+  seeAllLinkUrl: string;
 }
 
 /**

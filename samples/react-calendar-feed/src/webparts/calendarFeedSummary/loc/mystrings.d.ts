@@ -15,6 +15,9 @@ declare interface ICalendarFeedSummaryWebPartStrings {
   HideShowPreviousNextButtonsLabel: string;
   HideShowPreviousNextButtonsYes: string;
   HideShowPreviousNextButtonsNo: string;
+  HideShowSeeAllLinkLabel: string;
+  HideShowSeeAllLinkYes: string;
+  HideShowSeeAllLinkNo: string;
   PlaceholderTitle: string;
   PlaceholderDescription: string;
   ConfigureButton: string;

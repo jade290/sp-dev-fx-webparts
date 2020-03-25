@@ -29,7 +29,10 @@
         "cacheDuration": 15,
         "maxTotal": 10,
         "convertFromUTC": false,
-        "hideShowPreviousNextButtons": false
+        "hideShowSeeAllLink": false,
+        "hideShowPreviousNextButtons": false,
+        "seeAllLinkText": "See All",
+        "seeAllLinkUrl": ""
       }
   }]
 }

@@ -52,4 +52,8 @@ export interface ICalendarFeedSummaryWebPartProps {
    * Indicates the visibility of the Next and Previous navigation buttons
    */
   hideShowPreviousNextButtons: boolean;
+  /**
+   * Indicates the visibility of the 'See All' Link
+   */
+  hideShowSeeAllLink: boolean;
 }
