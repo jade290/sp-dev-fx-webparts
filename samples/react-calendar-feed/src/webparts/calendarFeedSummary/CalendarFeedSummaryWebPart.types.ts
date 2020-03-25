@@ -48,4 +48,8 @@ export interface ICalendarFeedSummaryWebPartProps {
    * Indicates the dates received from feeds do not specify a timezone
    */
   convertFromUTC: boolean;
+  /**
+   * Indicates the visibility of the Next and Previous navigation buttons
+   */
+  hideShowPreviousNextButtons: boolean;
 }

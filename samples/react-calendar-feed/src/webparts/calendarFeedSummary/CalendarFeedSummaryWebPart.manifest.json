@@ -22,13 +22,14 @@
       },
       "officeFabricIconFontName": "Calendar",
       "properties": {
-        "title": "Upcoming Events",
+        "title": "Events",
         "dateRange": 4,
         "maxEvents": 4,
         "useCORS": false,
         "cacheDuration": 15,
         "maxTotal": 10,
-        "convertFromUTC": false
+        "convertFromUTC": false,
+        "hideShowPreviousNextButtons": false
       }
   }]
 }

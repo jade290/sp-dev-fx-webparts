@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
 
-import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
+import { BaseClientSideWebPart, PropertyPaneTextField } from "@microsoft/sp-webpart-base";
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -140,7 +140,8 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
       cacheDuration,
       feedType,
       maxTotal,
-      convertFromUTC
+      convertFromUTC,
+      hideShowPreviousNextButtons
     } = this.properties;
 
     const isMock: boolean = feedType === CalendarServiceProviderType.Mock;
@@ -156,7 +157,6 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
             {
               groupName: strings.FeedSettingsGroupName,
               groupFields: [
-                // feed type drop down. Add your own types in the drop-down list
                 PropertyPaneDropdown("feedType", {
                   label: strings.FeedTypeFieldLabel,
                   options: feedTypeOptions
@@ -184,6 +184,17 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
                     { key: DateRange.Quarter, text: strings.DateRangeOptionQuarter },
                     { key: DateRange.Year, text: strings.DateRangeOptionUpcoming },
                   ]
+                }),
+              ]
+            },
+            // layout group
+            {
+              groupName: strings.LayoutSettingsGroupName,
+              groupFields: [
+                PropertyPaneToggle("hideShowPreviousNextButtons", {
+                  label: strings.HideShowPreviousNextButtonsLabel,
+                  onText: strings.HideShowPreviousNextButtonsYes,
+                  offText: strings.HideShowPreviousNextButtonsNo,
                 }),
               ]
             },

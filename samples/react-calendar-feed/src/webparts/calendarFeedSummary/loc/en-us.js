@@ -29,6 +29,7 @@ define([], function() {
     DateRangeOptionMonth: "Next month",
     DateRangeOptionQuarter: "Next quarter",
     UseCORSFieldLabel: "Use proxy",
+    HideShowPreviousNextButtonsLabel: "Hide or Show Navigation",
     UseCORSFieldCallout: "Enable this option if you get a CORS message",
     UseCORSFieldCalloutDisabled: "This option is disabled when using the Mock provider",
     CORSOn: "On",
@@ -61,6 +62,7 @@ define([], function() {
     AddToCalendarButtonLabel: "Add to my calendar",
     AllDayDateFormat: "dddd, MMMM Do YYYY",
     LocalizedTimeFormat: "llll",
-    FeedSettingsGroupName: "Calendar feed"
+    FeedSettingsGroupName: "Calendar feed",
+    LayoutSettingsGroupName: "Layout Settings"
   }
 });

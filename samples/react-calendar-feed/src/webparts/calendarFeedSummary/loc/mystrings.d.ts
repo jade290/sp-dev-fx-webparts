@@ -12,6 +12,9 @@ declare interface ICalendarFeedSummaryWebPartStrings {
   AllItemsUrlFieldLabel: string;
   FeedUrlFieldLabel: string;
   FeedTypeFieldLabel: string;
+  HideShowPreviousNextButtonsLabel: string;
+  HideShowPreviousNextButtonsYes: string;
+  HideShowPreviousNextButtonsNo: string;
   PlaceholderTitle: string;
   PlaceholderDescription: string;
   ConfigureButton: string;
@@ -62,6 +65,7 @@ declare interface ICalendarFeedSummaryWebPartStrings {
   AllDayDateFormat: string;
   LocalizedTimeFormat: string;
   FeedSettingsGroupName: string;
+  LayoutSettingsGroupName: string;
 }
 
 declare module 'CalendarFeedSummaryWebPartStrings' {
