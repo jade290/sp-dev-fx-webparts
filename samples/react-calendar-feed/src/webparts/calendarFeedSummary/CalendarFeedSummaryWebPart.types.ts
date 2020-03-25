@@ -56,4 +56,12 @@ export interface ICalendarFeedSummaryWebPartProps {
    * Indicates the visibility of the 'See All' Link
    */
   hideShowSeeAllLink: boolean;
+  /**
+   * Static text of 'See All' Link
+   */
+  seeAllLinkText: string;
+  /**
+   * Change of text of the 'See All' Link
+   */
+  seeAllLinkUrl: string;
 }

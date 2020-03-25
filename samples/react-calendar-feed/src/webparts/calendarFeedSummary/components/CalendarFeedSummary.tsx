@@ -110,6 +110,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
             title={this.props.title}
             updateProperty={this.props.updateProperty}
           />
+          <div><a href='{this.props.seeAllLinkUrl}'>{this.props.seeAllLinkText}</a></div>
         </div>
         <div className={styles.content}>
           {this._renderContent()}

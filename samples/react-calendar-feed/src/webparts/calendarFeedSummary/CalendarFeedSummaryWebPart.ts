@@ -107,8 +107,8 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
         updateProperty: (value: string) => {
           this.properties.title = value;
         },
-        seeAllLinkText: "",
-        seeAllLinkUrl: ""
+        seeAllLinkText: this.properties.seeAllLinkText,
+        seeAllLinkUrl: this.properties.seeAllLinkUrl,
       }
     );
 
@@ -198,10 +198,10 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
                   onText: strings.HideShowPreviousNextButtonsYes,
                   offText: strings.HideShowPreviousNextButtonsNo,
                 }),
-                PropertyPaneToggle("hideShowPreviousNextButtons", {
-                  label: strings.HideShowPreviousNextButtonsLabel,
-                  onText: strings.HideShowPreviousNextButtonsYes,
-                  offText: strings.HideShowPreviousNextButtonsNo,
+                PropertyPaneToggle("HideShowSeeAllLink", {
+                  label: strings.HideShowSeeAllLinkLabel,
+                  onText: strings.HideShowSeeAllLinkYes,
+                  offText: strings.HideShowSeeAllLinkNo,
                 }),
               ]
             },
