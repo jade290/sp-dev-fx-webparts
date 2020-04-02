@@ -4,12 +4,14 @@ import { WordPressFullCalendarService } from "./WordPressFullCalendarService";
 import { iCalCalendarService } from "./iCalCalendarService";
 import { ExchangePublicCalendarService } from "./ExchangePublicCalendarService";
 import { SharePointCalendarService } from "./SharePointCalendarService";
+import { ApiCalendarService } from "./ApiCalendarService";
 
 // Localization
 import * as strings from "CalendarServicesStrings";
 
 export enum CalendarServiceProviderType {
   SharePoint = "SharePoint",
+  API = "API",
   WordPress = "WordPress",
   Exchange = "Exchange",
   iCal = "iCal",
@@ -25,6 +27,12 @@ export class CalendarServiceProviderList {
         key: CalendarServiceProviderType.SharePoint,
         initialize: () => new SharePointCalendarService()
       },
+      {
+        label: strings.ApiProviderName,
+        key: CalendarServiceProviderType.API,
+        initialize: () => new ApiCalendarService()
+      },
+      
       {
         label: strings.ExchangeProviderName,
         key: CalendarServiceProviderType.Exchange,

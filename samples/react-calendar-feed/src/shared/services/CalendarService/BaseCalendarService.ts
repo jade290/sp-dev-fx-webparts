@@ -1,4 +1,5 @@
-import { HttpClient, HttpClientResponse } from "@microsoft/sp-http";
+import { HttpClient, IHttpClientOptions, HttpClientResponse } from "@microsoft/sp-http";
+//import { axios } from axios;
 import { IWebPartContext } from "@microsoft/sp-webpart-base";
 import * as moment from "moment";
 import { CalendarEventRange } from ".";
@@ -94,6 +95,41 @@ export abstract class BaseCalendarService implements ICalendarService {
     return this.Context.httpClient.fetch(requestUrl,
       HttpClient.configurations.v1, {});
   }
+
+protected fetchJsonResponse(feedUrl: string): Promise<HttpClientResponse> {
+  const postURL = "https://avoratech.sharepoint.com/sites/AvoraCommunity/_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
+  const authToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYXZvcmF0ZWNoLnNoYXJlcG9pbnQuY29tQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsImlzcyI6IjAwMDAwMDAxLTAwMDAtMDAwMC1jMDAwLTAwMDAwMDAwMDAwMEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJpYXQiOjE1ODU3MTQzMTgsIm5iZiI6MTU4NTcxNDMxOCwiZXhwIjoxNTg1NzQzNDE4LCJpZGVudGl0eXByb3ZpZGVyIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsIm5hbWVpZCI6IjZhMjE1NGFmLTY1MzEtNDUyOC05NzhiLTZiYjA2OTAyYzgzOEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJvaWQiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJzdWIiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJ0cnVzdGVkZm9yZGVsZWdhdGlvbiI6ImZhbHNlIn0.Tv2t77tsUD1GDktwbeK2sTjyDRcWbUp6C5gAry6u3FbZ3osNuDuNYMS7lUDD9DbOsZz3AlXV17DP9sXYOji4g6sYfQlNfk8Mlvmam4np42MxEUdwZ3xNLNl-rqAWLszgI_NZ8KGOlqF-FOP_R7lo-2MlQMcLa9WFesjJ_2gdMFuZC0t1tuGkIIcFcwbxLqqKU40IZncF-yrZH6m2FS6kYpiSlhLwPDX-kWJFBEYCCvnB2HreziXznVmm-QuJykpDohjpnOjTvSL3ImzAzDaZTryxDObDSptNOTYqksf6ymzujOwYnR-GTFMjIgfaZQNF_U23ZviTxtU4B1iZqzNuhA";
+
+  // const body: string = JSON.stringify({
+  //   'name1': value1,
+  //   'name2': value2,
+  //   'name3': value3,
+  // });
+
+  const requestHeaders: Headers = new Headers();
+  requestHeaders.append('Content-type', 'application/json');
+  //For an OAuth token
+  requestHeaders.append('Authorization', authToken);
+  requestHeaders.append('Accept', 'application/json;odata=verbose');
+
+  const httpClientOptions: IHttpClientOptions = {
+    // body: body,
+    headers: requestHeaders
+  };
+
+  console.log("About to make REST API request.");
+
+  return this.Context.httpClient.get(
+    postURL,
+    HttpClient.configurations.v1,
+    httpClientOptions)
+    .then((response) => {
+      console.log("REST API response received.");
+      console.log(response.json);
+      return response.json();
+    });
+}
+
 
   /**
    * Returns a URL or a CORS-formatted URL

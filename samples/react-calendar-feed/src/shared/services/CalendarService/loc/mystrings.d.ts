@@ -1,5 +1,6 @@
 declare interface ICalendarServicesStrings {
   SharePointProviderName: string;
+  ApiProviderName: string;
   WordPressProviderName: string;
   ExchangeProviderName: string;
   iCalProviderName: string;
