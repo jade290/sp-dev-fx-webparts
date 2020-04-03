@@ -11,6 +11,7 @@ define([], function() {
     PropertyPaneDescription: "Select the type of feed you wish to connect to and the feed URL.",
     AllItemsUrlFieldLabel: "View all events URL",
     FeedUrlFieldLabel: "Feed URL",
+    siteEventListsDdlLabel: "Events list",
     FeedTypeFieldLabel: "Feed type",
     PlaceholderTitle: "Configure event feed",
     PlaceholderDescription: "To display a summary of events, you need to select a feed type and configure the event feed URL.",

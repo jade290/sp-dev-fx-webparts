@@ -12,7 +12,7 @@ export class ApiCalendarService extends BaseCalendarService
   implements ICalendarService {
   constructor() {
     super();
-    this.Name = "SharePoint";
+    this.Name = "API";
   }
 
   // private token = async ():  Promise<Object> => {
@@ -23,7 +23,7 @@ export class ApiCalendarService extends BaseCalendarService
 
   protected fetchJsonResponse(feedUrl: string) : Promise<HttpClientResponse> {
     const postURL = "https://avoratech.sharepoint.com/sites/AvoraCommunity/_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
-    const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYXZvcmF0ZWNoLnNoYXJlcG9pbnQuY29tQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsImlzcyI6IjAwMDAwMDAxLTAwMDAtMDAwMC1jMDAwLTAwMDAwMDAwMDAwMEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJpYXQiOjE1ODU3OTQ0NDMsIm5iZiI6MTU4NTc5NDQ0MywiZXhwIjoxNTg1ODIzNTQzLCJpZGVudGl0eXByb3ZpZGVyIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsIm5hbWVpZCI6IjZhMjE1NGFmLTY1MzEtNDUyOC05NzhiLTZiYjA2OTAyYzgzOEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJvaWQiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJzdWIiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJ0cnVzdGVkZm9yZGVsZWdhdGlvbiI6ImZhbHNlIn0.EkrhJ2YQMNSpR8unFohfaOVAG8G6gZnTfB3Sv51YKb5BZ-tlvRBsYc76V_67Em0xKXa_VBhj8IwGj8jgnOUovkbzYN_BOmaSvYCl6i_OsW-cCXtrh_F3yJjFk6aQw9fHiv-rE-C7aP0bXZxEwrKapJqwxtF437WaFqOWcYSMs5pwM1cvhorzgWdaaErBZZdeWDO0iBapgEmg7tZV7QCA398Zo8_pUM_6puXSPTCoyKx4zVy8gxMGqCQdSmS1wvfVW-2whjMclWV9JRhTqGq_VKy4H72P2tg6QIhm5VphppA38kE1Xo8o-Rh5NbUgmOCXR7O46L9YlmD3dlBbHJGG6g";
+    const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYXZvcmF0ZWNoLnNoYXJlcG9pbnQuY29tQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsImlzcyI6IjAwMDAwMDAxLTAwMDAtMDAwMC1jMDAwLTAwMDAwMDAwMDAwMEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJpYXQiOjE1ODU5MjQ3NTQsIm5iZiI6MTU4NTkyNDc1NCwiZXhwIjoxNTg1OTUzODU0LCJpZGVudGl0eXByb3ZpZGVyIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsIm5hbWVpZCI6IjZhMjE1NGFmLTY1MzEtNDUyOC05NzhiLTZiYjA2OTAyYzgzOEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJvaWQiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJzdWIiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJ0cnVzdGVkZm9yZGVsZWdhdGlvbiI6ImZhbHNlIn0.kNcibr-84eDZYJC3rXgeWKHtcY2FRLtAt15M74emxpoaFTC1jClOi5ZCKFchxdWSzgvf6N6KsmQRLSq40c_6QezE8eowN80BWGPTrl0qWM4Pg-W0KuQia3ojsAW6REgevGiF0ANB4bZWGiRcHfGZV34n1aNFXRIUd6eUQ2A489lNr2MKXVc8_Se07qvv_iEVIpA83-6z-UaZe2eM_BztcqdDjhKdY6IrgMAhqMf8fVbrXNlQys9mI4_KFp1cztdcRWCTJLzIOKjNMaB9cEdCgyCv3ts8LM88rZstoNB7wmOgEsgAEcHM8pMnHV_9jEStev9JItKWRWD-4mRssPKwlg";
     const requestHeaders: Headers = new Headers();
     requestHeaders.append('Content-type', 'application/json');
     //For an OAuth token
@@ -101,7 +101,7 @@ export class ApiCalendarService extends BaseCalendarService
     console.log("listUrl: " + listUrl);
 
     // Find the "lists" portion of the URL to get the site URL
-    let webLocation = listUrl.substr(0, listUrl.indexOf("lists/"));
+    let webLocation = listUrl.substr(0, listUrl.indexOf("lists/")).replace("_api/web/", "");
     console.log("webLocation: " + webLocation);
     let siteUrl = webRoot + webLocation;
 
@@ -121,7 +121,7 @@ export class ApiCalendarService extends BaseCalendarService
 
         // Once we get the list, convert to calendar events
         let events: ICalendarEvent[] = data2.d.results.map((item: any) => {
-          let eventUrl: string = combine(webUrl, "DispForm.aspx?ID=" + item.Id);
+          let eventUrl: string = combine(siteUrl, "Lists/SharePoint%20Calendar/DispForm.aspx?ID=" + item.Id);
           const eventItem: ICalendarEvent = {
             title: item.Title,
             start: item.EventDate,

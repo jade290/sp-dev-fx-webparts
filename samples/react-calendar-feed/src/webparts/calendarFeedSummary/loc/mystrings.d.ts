@@ -11,6 +11,7 @@ declare interface ICalendarFeedSummaryWebPartStrings {
   BasicGroupName: string;
   AllItemsUrlFieldLabel: string;
   FeedUrlFieldLabel: string;
+  siteEventListsDdlLabel: string;
   FeedTypeFieldLabel: string;
   HideShowPreviousNextButtonsLabel: string;
   HideShowPreviousNextButtonsYes: string;
