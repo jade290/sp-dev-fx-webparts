@@ -4,7 +4,8 @@
     "name": "react-calendar-feed-client-side-solution",
     "id": "25653136-fc83-4abe-b9d2-a4ac041959d5",
     "version": "1.0.0.0",
-    "includeClientSideAssets": true
+    "includeClientSideAssets": true,
+    "isDomainIsolated": true
   },
   "paths": {
     "zippedPackage": "solution/react-calendar-feed.sppkg"

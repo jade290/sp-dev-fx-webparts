@@ -15,6 +15,7 @@ import { ICalendarService } from "./ICalendarService";
 export abstract class BaseCalendarService implements ICalendarService {
   public Context: IWebPartContext;
   public FeedUrl: string;
+  public SiteEventListsDdlChoice: string;
   public EventRange: CalendarEventRange;
   public UseCORS: boolean;
   public CacheDuration: number;

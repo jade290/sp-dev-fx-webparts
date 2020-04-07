@@ -13,6 +13,7 @@ export class SharePointCalendarService extends BaseCalendarService
   constructor() {
     super();
     this.Name = "SharePoint";
+    console.log("Arrived at SharePoint Service");
   }
 
   public getEvents = async (): Promise<ICalendarEvent[]> => {

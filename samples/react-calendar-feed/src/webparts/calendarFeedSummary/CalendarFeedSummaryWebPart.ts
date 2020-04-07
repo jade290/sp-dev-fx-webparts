@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 
 import { BaseClientSideWebPart, PropertyPaneTextField } from "@microsoft/sp-webpart-base";
+import { PropertyFieldDropdownWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldDropdownWithCallout';
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -182,19 +183,18 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
                   onGetErrorMessage: this._validateFeedUrl.bind(this)
                 }),
                                 // drop down -- only if using a api provider
-                isAPI && PropertyPaneDropdown("siteEventListsDdl", {
-                                  //calloutTrigger: CalloutTriggers.Hover,
-                                  //key: "siteEventListsDdlId",
-                label: strings.siteEventListsDdlLabel,
-                options: this.siteCalendarLists,
-                selectedKey: siteEventListsDdlChoice,
-                                  // calloutContent:
-                                  //   React.createElement("div", {}, strings.FeedUrlCallout),
-                                  // calloutWidth: 200,
-                                  //value: siteEventListsDdlChoice,
-                                  // placeholder: "",
-                                  // deferredValidationTime: 200,
-                                  // onGetErrorMessage: this._validateFeedUrl.bind(this)
+                isAPI && PropertyFieldDropdownWithCallout("siteEventListsDdlChoice", {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: "siteEventListsDdlId",
+                  label: strings.siteEventListsDdlLabel,
+                  options: this.siteCalendarLists,
+                  selectedKey: this.properties.siteEventListsDdlChoice,
+                  calloutContent: this.getsiteEventListsDdlCalloutContent(),
+                  // calloutWidth: 200,
+                  // value: siteEventListsDdlChoice,
+                  // placeholder: "",
+                  // deferredValidationTime: 200,
+                  // onGetErrorMessage: this._validateFeedUrl.bind(this)
                 }),
                 // how days ahead from today are we getting
                 PropertyPaneDropdown("dateRange", {
@@ -308,9 +308,51 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
   protected get dataVersion(): Version {
     return Version.parse('2.0');
   }
+  
+  private getsiteEventListsDdlCalloutContent(): JSX.Element {
+    const selectedKey: string = this.properties.siteEventListsDdlChoice;
+  
+    if (selectedKey) {
+      console.log("selectedKey: " + selectedKey);
+      return React.createElement('div', {}, `you have selected ${selectedKey}`);
+    } else {
+      console.log("selectedKey:  does not exist");
+      return React.createElement('div', {}, `you haven't selected any version`);
+    }
+  }
+
+  //Token expires in less than 24 hours so lets get a new one with each request
+  // Access is denied, this method does not work
+  private getAuthToken(): Promise<HttpClientResponse> {
+    //const postURL = "https://cors-anywhere.herokuapp.com/" + "http://accounts.accesscontrol.windows.net/"+ tenantId +"/OAuth/2";
+    const postURL = "https://accounts.accesscontrol.windows.net/23d0b6b0-36e1-4c9d-98fa-9c2366c8cfe5/tokens/OAuth/2";
+
+    const requestHeaders: Headers = new Headers();
+    requestHeaders.append('Content-type', 'application/x-www-form-urlencoded');
+    requestHeaders.append('grant_type', "client_credentials");
+    requestHeaders.append('resource', '00000003-0000-0ff1-ce00-000000000000/avoratech.sharepoint.com@' + strings.ClientId);
+    requestHeaders.append('client_id', strings.ClientId + "@" + strings.TenantId);
+    requestHeaders.append('client_secret', strings.ClientSecret);
+    const httpClientOptions: IHttpClientOptions = {
+      headers: requestHeaders
+    };
+
+    console.log("About to make token request.");
+
+    return this.context.httpClient.post(
+      postURL,
+      HttpClient.configurations.v1,
+      httpClientOptions)
+      .then((response) => {
+        console.log("REST API response received.");
+        console.log("Token Orgi: " + response.json);
+        return response;
+      });
+  }
+
   private getEventsListRestApi(): Promise<HttpClientResponse> {
-    const postURL = "https://avoratech.sharepoint.com/sites/AvoraCommunity/_api/web/lists";
-    const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYXZvcmF0ZWNoLnNoYXJlcG9pbnQuY29tQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsImlzcyI6IjAwMDAwMDAxLTAwMDAtMDAwMC1jMDAwLTAwMDAwMDAwMDAwMEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJpYXQiOjE1ODU5MjQ3NTQsIm5iZiI6MTU4NTkyNDc1NCwiZXhwIjoxNTg1OTUzODU0LCJpZGVudGl0eXByb3ZpZGVyIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsIm5hbWVpZCI6IjZhMjE1NGFmLTY1MzEtNDUyOC05NzhiLTZiYjA2OTAyYzgzOEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJvaWQiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJzdWIiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJ0cnVzdGVkZm9yZGVsZWdhdGlvbiI6ImZhbHNlIn0.kNcibr-84eDZYJC3rXgeWKHtcY2FRLtAt15M74emxpoaFTC1jClOi5ZCKFchxdWSzgvf6N6KsmQRLSq40c_6QezE8eowN80BWGPTrl0qWM4Pg-W0KuQia3ojsAW6REgevGiF0ANB4bZWGiRcHfGZV34n1aNFXRIUd6eUQ2A489lNr2MKXVc8_Se07qvv_iEVIpA83-6z-UaZe2eM_BztcqdDjhKdY6IrgMAhqMf8fVbrXNlQys9mI4_KFp1cztdcRWCTJLzIOKjNMaB9cEdCgyCv3ts8LM88rZstoNB7wmOgEsgAEcHM8pMnHV_9jEStev9JItKWRWD-4mRssPKwlg";
+    const postURL = strings.Site + "_api/web/lists";
+    const token = strings.Token; //"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYXZvcmF0ZWNoLnNoYXJlcG9pbnQuY29tQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsImlzcyI6IjAwMDAwMDAxLTAwMDAtMDAwMC1jMDAwLTAwMDAwMDAwMDAwMEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJpYXQiOjE1ODU5NTkxNzcsIm5iZiI6MTU4NTk1OTE3NywiZXhwIjoxNTg1OTg4Mjc3LCJpZGVudGl0eXByb3ZpZGVyIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsIm5hbWVpZCI6IjZhMjE1NGFmLTY1MzEtNDUyOC05NzhiLTZiYjA2OTAyYzgzOEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJvaWQiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJzdWIiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJ0cnVzdGVkZm9yZGVsZWdhdGlvbiI6ImZhbHNlIn0.e39hOKZhyxasv0YXaa0HQHfA0g_wrVw5XaAI1IEDc5QnBq7CWeHsKr4hewixUqEArpFLYAtaKvaQlPOdzZHymwx7cp11EpOzVBKsBKBIDeQs3So8HKelIzBKXziXegG6iShdxQa5TrfAgFPF1miPfZrutTBfCd0BDjCCfHlht80dZZgKzMsUEtQbVDCcuCxl6Ubj5d3Eo7_Pmy6F6NHirQLxtKKD8aOpd2XDrFe9QANX8NLCSwtmwvR3PEAxtBt16lajCX5KFpcoDHBzkmobFvIlmabj5tlfEMy3RVYaFM5EjxY_4RBvB6v9901R7suba9Q8YSvUHWh0M_UBZUG0sA";
     const requestHeaders: Headers = new Headers();
     requestHeaders.append('Content-type', 'application/json');
     //For an OAuth token
@@ -334,6 +376,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
       });
   }
   protected getSiteEventLists = async (): Promise<IPropertyPaneDropdownOption[]> => {
+    this.properties.feedUrl = "https://test.com";
     let data = await this.getEventsListRestApi();
     if (data) {
       let data2 = Object.create(data);
@@ -363,8 +406,8 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
         return data3;
        }
        catch (error) {
-      //   console.log("Exception caught by catch in SharePoint provider", error);
-      //   throw error;
+         console.log("Exception caught by catch in SharePoint provider", error);
+         throw error;
        }
     }
     //return data;
@@ -374,11 +417,12 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
    * Returns true if the web part is configured and ready to show events. If it returns false, we'll show the configuration placeholder.
    */
   private _isConfigured(): boolean {
-    const { feedUrl, feedType } = this.properties;
+    const { feedUrl, feedType, siteEventListsDdlChoice } = this.properties;
 
     // see if web part has a feed type configured
     const hasFeedType: boolean = feedType !== null
-      && feedType !== undefined;
+      && feedType !== undefined || 
+      siteEventListsDdlChoice !== null && siteEventListsDdlChoice !== undefined;
 
     // Mock feeds don't need anything else
     if (feedType === CalendarServiceProviderType.Mock) {
@@ -400,8 +444,9 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
    * @param feedUrl The URL to validate
    */
   private _validateFeedUrl(feedUrl: string): string {
-    if (this.properties.feedType === CalendarServiceProviderType.Mock) {
-      // we don't need a URL for mock feeds
+    if (this.properties.feedType === CalendarServiceProviderType.Mock || 
+        this.properties.feedType === CalendarServiceProviderType.API) {
+      // we don't need a URL for mock feeds or API
       return '';
     }
 

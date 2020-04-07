@@ -27,6 +27,7 @@ declare interface ICalendarFeedSummaryWebPartStrings {
   FeedTypeOptionRSS: string;
   FeedTypeOptionWordPress: string;
   FeedUrlCallout: string;
+  siteEventListsDdlCallout: string;
   MaxEventsFieldLabel: string;
   MaxEventsFieldDescription: string;
   DateRangeFieldLabel: string;
@@ -70,6 +71,11 @@ declare interface ICalendarFeedSummaryWebPartStrings {
   LocalizedTimeFormat: string;
   FeedSettingsGroupName: string;
   LayoutSettingsGroupName: string;
+  Site: string;
+  Token: string;
+  ClientId: string;
+  ClientSecret: string;
+  TenantId: string;
 }
 
 declare module 'CalendarFeedSummaryWebPartStrings' {

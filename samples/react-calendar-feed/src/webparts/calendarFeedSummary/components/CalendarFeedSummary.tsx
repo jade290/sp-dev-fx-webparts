@@ -34,6 +34,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
    * When components are mounted, get the events
    */
   public componentDidMount(): void {
+    console.log("props.isConfigured" + this.props.isConfigured);
     if (this.props.isConfigured) {
       this._loadEvents(true);
     }
@@ -46,9 +47,21 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
    */
   public componentDidUpdate(prevProps: ICalendarFeedSummaryProps, prevState: ICalendarFeedSummaryState): void {
     // only reload if the provider info has changed
+    console.log("componentDidUpdate");
+    console.log("this.props.provider:" + this.props.provider);
+    console.log("prevProps.provider:" + prevProps.provider);
+    if(!prevProps.provider){
+      this._loadEvents(false);
+      return;
+    }
+    if(!this.props.provider){
+    //if(!prevProps.provider || !this.props.provider){
+      return;
+    }
     const prevProvider: ICalendarService = prevProps.provider;
+    console.log("prevProvider: "+prevProvider.Name);
     const currProvider: ICalendarService = this.props.provider;
-
+    console.log("currProvider: "+currProvider.Name);
     // if there isn't a current provider, do nothing
     if (currProvider === undefined) {
       return;
@@ -63,16 +76,22 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
       // there's nothing to do because there isn't a provider
       return;
     }
+    
+    console.log("prevProvider.SiteEventListsDdlChoice: " +prevProvider.SiteEventListsDdlChoice);
+    console.log("currProvider.SiteEventListsDdlChoice: " +currProvider.SiteEventListsDdlChoice);
 
     const settingsHaveChanged: boolean = prevProvider.CacheDuration !== currProvider.CacheDuration ||
       prevProvider.Name !== currProvider.Name ||
       prevProvider.FeedUrl !== currProvider.FeedUrl ||
+      prevProvider.SiteEventListsDdlChoice !== currProvider.SiteEventListsDdlChoice ||
       prevProvider.Name !== currProvider.Name ||
       prevProvider.EventRange.DateRange !== currProvider.EventRange.DateRange ||
       prevProvider.UseCORS !== currProvider.UseCORS ||
       prevProvider.MaxTotal !== currProvider.MaxTotal ||
       prevProvider.ConvertFromUTC !== currProvider.ConvertFromUTC;
+      // prevProvider.HideShowPreviousNextButtons !== currProvider.HideShowPreviousNextButtons;
 
+    console.log("Settings changed status: " + settingsHaveChanged);
     if (settingsHaveChanged) {
       // only load from cache if the providers haven't changed, otherwise reload.
       this._loadEvents(false);
@@ -89,7 +108,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
     const {
       isConfigured,
     } = this.props;
-
+  
     // if we're not configured, show the placeholder
     if (!isConfigured) {
       return <Placeholder
@@ -110,7 +129,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
             title={this.props.title}
             updateProperty={this.props.updateProperty}
           />
-          <div><a href='{this.props.seeAllLinkUrl}'>{this.props.seeAllLinkText}</a></div>
+            <div><a href="https://avoratech.sharepoint.com/sites/AvoraCommunity/Lists/SharePoint%20Calendar/AllItems.aspx">{this.props.seeAllLinkText}</a></div>
         </div>
         <div className={styles.content}>
           {this._renderContent()}
@@ -315,6 +334,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
    * Load events from the cache or, if expired, load from the event provider
    */
   private async _loadEvents(useCacheIfPossible: boolean): Promise<void> {
+    console.log("Calling _loadEvents(useCacheIfPossible: boolean): " + useCacheIfPossible);
     // before we do anything with the data provider, let's make sure that we don't have stuff stored in the cache
 
     // load from cache if: 1) we said to use cache, and b) if we have something in cache
@@ -323,7 +343,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
 
       const { Name, FeedUrl } = this.props.provider;
       const cacheStillValid: boolean = moment().isBefore(feedCache.expiry);
-
+      console.log("Name: " + Name + " FeedUrl " + FeedUrl);
       // make sure the cache hasn't expired or that the settings haven't changed
       if (cacheStillValid && feedCache.feedType === Name && feedCache.feedUrl === FeedUrl) {
         this.setState({
@@ -342,6 +362,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
       });
 
       try {
+        console.log("Calendar Feed Summary - About to call getEvents");
         let events = await dataProvider.getEvents();
         if (dataProvider.MaxTotal > 0) {
           events = events.slice(0, dataProvider.MaxTotal);

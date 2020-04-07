@@ -64,4 +64,8 @@ export interface ICalendarFeedSummaryWebPartProps {
    * Change of text of the 'See All' Link
    */
   seeAllLinkUrl: string;
+  /**
+   * Holder of the site event list the user selects
+   */
+  siteEventListsDdlChoice: string;
 }
