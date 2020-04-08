@@ -5,7 +5,7 @@
     "id": "25653136-fc83-4abe-b9d2-a4ac041959d5",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
-    "isDomainIsolated": true
+    "isDomainIsolated": false
   },
   "paths": {
     "zippedPackage": "solution/react-calendar-feed.sppkg"
