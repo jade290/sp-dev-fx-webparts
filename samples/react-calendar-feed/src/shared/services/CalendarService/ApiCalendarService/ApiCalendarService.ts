@@ -120,13 +120,11 @@ export class ApiCalendarService extends BaseCalendarService
       // Open the web associated to the site
       let web = new Web(siteUrl);
 
-      // Build a filter so that we don't retrieve every single thing unless necesssary
-      let dateFilter: string = "EventDate ge datetime'" + this.EventRange.Start.toISOString() + "' and EndDate lt datetime'" + this.EventRange.End.toISOString() + "'";
       try {
 
         // Once we get the list, convert to calendar events
         let events: ICalendarEvent[] = data2.d.results.map((item: any) => {
-          let eventUrl: string = combine(siteUrl, "Lists/SharePoint%20Calendar/DispForm.aspx?ID=" + item.Id);
+          let eventUrl: string = combine(strings.Site, "Lists/SharePoint%20Calendar/DispForm.aspx?ID=" + item.Id);
           const eventItem: ICalendarEvent = {
             title: item.Title,
             start: item.EventDate,
@@ -137,10 +135,15 @@ export class ApiCalendarService extends BaseCalendarService
             description: item.Description,
             location: item.Location
           };
-          return eventItem;
+          return eventItem; 
         });
-        //   // Return the calendar items
-        return events;
+        // Build a filter so that we don't retrieve every single thing unless necesssary
+          events = events.filter((item: any) =>
+            new Date(item.start).getTime() >= this.EventRange.Start.getTime() && 
+            new Date(item.start).getTime() <= this.EventRange.End.getTime());
+        
+        // Return the calendar items
+          return events;
       }
       catch (error) {
         console.log("Exception caught by catch in SharePoint provider", error);
