@@ -141,6 +141,10 @@ export class ApiCalendarService extends BaseCalendarService
           events = events.filter((item: any) =>
             new Date(item.start).getTime() >= this.EventRange.Start.getTime() && 
             new Date(item.start).getTime() <= this.EventRange.End.getTime());
+
+        // Sort the events by start date time
+          events = events.sort((item: any, item2: any) =>
+            new Date(item.start).getTime() - new Date(item2.start).getTime());
         
         // Return the calendar items
           return events;
@@ -149,6 +153,6 @@ export class ApiCalendarService extends BaseCalendarService
         console.log("Exception caught by catch in SharePoint provider", error);
         throw error;
       }
-    }
+    } 
   }
 }
