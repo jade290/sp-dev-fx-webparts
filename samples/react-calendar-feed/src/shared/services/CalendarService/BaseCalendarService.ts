@@ -5,6 +5,7 @@ import * as moment from "moment";
 import { CalendarEventRange } from ".";
 import { ICalendarEvent } from "./ICalendarEvent";
 import { ICalendarService } from "./ICalendarService";
+import * as strings from "CalendarFeedSummaryWebPartStrings";
 
 /**
  * Base Calendar Service
@@ -98,8 +99,8 @@ export abstract class BaseCalendarService implements ICalendarService {
   }
 
 protected fetchJsonResponse(feedUrl: string): Promise<HttpClientResponse> {
-  const postURL = "https://avoratech.sharepoint.com/sites/AvoraCommunity/_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
-  const authToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYXZvcmF0ZWNoLnNoYXJlcG9pbnQuY29tQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsImlzcyI6IjAwMDAwMDAxLTAwMDAtMDAwMC1jMDAwLTAwMDAwMDAwMDAwMEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJpYXQiOjE1ODU3MTQzMTgsIm5iZiI6MTU4NTcxNDMxOCwiZXhwIjoxNTg1NzQzNDE4LCJpZGVudGl0eXByb3ZpZGVyIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsIm5hbWVpZCI6IjZhMjE1NGFmLTY1MzEtNDUyOC05NzhiLTZiYjA2OTAyYzgzOEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJvaWQiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJzdWIiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJ0cnVzdGVkZm9yZGVsZWdhdGlvbiI6ImZhbHNlIn0.Tv2t77tsUD1GDktwbeK2sTjyDRcWbUp6C5gAry6u3FbZ3osNuDuNYMS7lUDD9DbOsZz3AlXV17DP9sXYOji4g6sYfQlNfk8Mlvmam4np42MxEUdwZ3xNLNl-rqAWLszgI_NZ8KGOlqF-FOP_R7lo-2MlQMcLa9WFesjJ_2gdMFuZC0t1tuGkIIcFcwbxLqqKU40IZncF-yrZH6m2FS6kYpiSlhLwPDX-kWJFBEYCCvnB2HreziXznVmm-QuJykpDohjpnOjTvSL3ImzAzDaZTryxDObDSptNOTYqksf6ymzujOwYnR-GTFMjIgfaZQNF_U23ZviTxtU4B1iZqzNuhA";
+  //const postURL = "https://avoratech.sharepoint.com/sites/AvoraCommunity/_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
+  const postURL = strings.Site + "/_api/web/lists/GetByTitle('"+ strings.ListName  +"')/items";
 
   // const body: string = JSON.stringify({
   //   'name1': value1,
@@ -110,7 +111,7 @@ protected fetchJsonResponse(feedUrl: string): Promise<HttpClientResponse> {
   const requestHeaders: Headers = new Headers();
   requestHeaders.append('Content-type', 'application/json');
   //For an OAuth token
-  requestHeaders.append('Authorization', authToken);
+  requestHeaders.append('Authorization', strings.Token);
   requestHeaders.append('Accept', 'application/json;odata=verbose');
 
   const httpClientOptions: IHttpClientOptions = {

@@ -14,7 +14,7 @@ export class ApiCalendarService extends BaseCalendarService
   constructor() {
     super();
     this.Name = "API";
-    this.FeedUrl = "https://avoratech.sharepoint.com/sites/AvoraCommunity/_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
+    //this.FeedUrl = "https://avoratech.sharepoint.com/sites/AvoraCommunity/_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
     console.log("Arrived at API Service");
     console.log("TEST FeedUrl Constructor: " + this.FeedUrl);
     console.log("TEST DDL Choice Constructor: " + this.SiteEventListsDdlChoice);
@@ -27,7 +27,8 @@ export class ApiCalendarService extends BaseCalendarService
   protected fetchJsonResponse(feedUrl: string) : Promise<HttpClientResponse> {
     console.log("API Service fetchJsonResponse method called.");
     console.log("FeedUrl: "+ feedUrl);
-    const postURL = strings.Site +"_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
+    //const postURL = strings.Site +"_api/web/lists/GetByTitle('SharePoint%20Calendar')/items";
+    const postURL = strings.Site +"_api/web/lists/GetByTitle('"+ strings.ListName  +"')/items";
     const token = strings.Token;
     const requestHeaders: Headers = new Headers();
     requestHeaders.append('Content-type', 'application/json');
@@ -124,7 +125,8 @@ export class ApiCalendarService extends BaseCalendarService
 
         // Once we get the list, convert to calendar events
         let events: ICalendarEvent[] = data2.d.results.map((item: any) => {
-          let eventUrl: string = combine(strings.Site, "Lists/SharePoint%20Calendar/DispForm.aspx?ID=" + item.Id);
+          //let eventUrl: string = combine(strings.Site, "Lists/SharePoint%20Calendar/DispForm.aspx?ID=" + item.Id);
+          let eventUrl: string = combine(strings.Site, "Lists/"+ strings.ListName  +"/DispForm.aspx?ID=" + item.Id);
           const eventItem: ICalendarEvent = {
             title: item.Title,
             start: item.EventDate,

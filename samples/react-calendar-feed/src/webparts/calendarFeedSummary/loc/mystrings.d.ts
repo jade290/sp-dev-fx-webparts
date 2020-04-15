@@ -76,6 +76,7 @@ declare interface ICalendarFeedSummaryWebPartStrings {
   ClientId: string;
   ClientSecret: string;
   TenantId: string;
+  ListName: string;
 }
 
 declare module 'CalendarFeedSummaryWebPartStrings' {

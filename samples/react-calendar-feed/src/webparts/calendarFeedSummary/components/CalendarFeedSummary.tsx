@@ -80,6 +80,8 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
     console.log("prevProvider.SiteEventListsDdlChoice: " +prevProvider.SiteEventListsDdlChoice);
     console.log("currProvider.SiteEventListsDdlChoice: " +currProvider.SiteEventListsDdlChoice);
 
+    //this.props.seeAllLinkUrl = "https://avoratech.sharepoint.com/sites/AvoraCommunity/Lists/SharePoint%20Calendar/AllItems.aspx";
+  
     const settingsHaveChanged: boolean = prevProvider.CacheDuration !== currProvider.CacheDuration ||
       prevProvider.Name !== currProvider.Name ||
       prevProvider.FeedUrl !== currProvider.FeedUrl ||
@@ -129,7 +131,9 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
             title={this.props.title}
             updateProperty={this.props.updateProperty}
           />
-            <div><a href="https://avoratech.sharepoint.com/sites/AvoraCommunity/Lists/SharePoint%20Calendar/AllItems.aspx">{this.props.seeAllLinkText}</a></div>
+            <div className={css(styles.seeAll, "col-md-6")}>
+              <a href={strings.Site + "_layouts/15/"+ strings.ListName +".aspx"}>{this.props.seeAllLinkText}</a>
+            </div>
         </div>
         <div className={styles.content}>
           {this._renderContent()}
@@ -341,7 +345,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
     if (useCacheIfPossible && localStorage.getItem(CacheKey)) {
       let feedCache: IFeedCache = JSON.parse(localStorage.getItem(CacheKey));
 
-      const { Name, FeedUrl } = this.props.provider;
+      const { Name, FeedUrl, SiteEventListsDdlChoice } = this.props.provider;
       const cacheStillValid: boolean = moment().isBefore(feedCache.expiry);
       console.log("Name: " + Name + " FeedUrl " + FeedUrl);
       // make sure the cache hasn't expired or that the settings haven't changed
