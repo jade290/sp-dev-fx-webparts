@@ -31,7 +31,8 @@ export class EventCard extends React.Component<IEventCardProps, IEventCardState>
             category,
             // description,
             location } = this.props.event;
-        const eventDate: moment.Moment = moment(start);
+        const eventDate: moment.Moment = moment(start).subtract(2, 'hours');
+        console.log(eventDate);
         const dateString: string = allDay ? eventDate.format(strings.AllDayDateFormat) : eventDate.format(strings.LocalizedTimeFormat);
         const { isEditMode } = this.props;
         return (
@@ -88,7 +89,7 @@ export class EventCard extends React.Component<IEventCardProps, IEventCardState>
             // category,
             // location
           } = this.props.event;
-        const eventDate: moment.Moment = moment.utc(start);
+        const eventDate: moment.Moment = moment(start).subtract(2, 'hours');
         const dateString: string = allDay ? eventDate.format(strings.AllDayDateFormat) : eventDate.format(strings.LocalizedTimeFormat);
         return (
             <div>
