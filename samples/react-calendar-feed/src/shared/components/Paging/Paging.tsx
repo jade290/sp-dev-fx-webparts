@@ -13,15 +13,14 @@ export class Paging extends React.Component<IPagingProps, IPagingState> {
     public render(): React.ReactElement<IPagingProps> {
 
         const { currentPage } = this.props;
-
         // calculate the page situation
         const numberOfPages: number = this._getNumberOfPages();
 
         // we disable the previous button if we're on page 1
-        const prevDisabled: boolean = currentPage < 1;
+        const prevDisabled: boolean = currentPage == 1;
 
         // we disable the next button if we're on the last page
-        const nextDisabled: boolean = currentPage >= numberOfPages;
+        const nextDisabled: boolean = (currentPage*1) === (numberOfPages*1);
 
         return (
             <div className={css(styles.Paging, this.props.showPageNum ? null : styles.noPageNum)}>
@@ -82,7 +81,8 @@ export class Paging extends React.Component<IPagingProps, IPagingState> {
      */
     private _getNumberOfPages(): number {
         const { totalItems, itemsCountPerPage } = this.props;
-        let numPages: number = Math.round(totalItems / itemsCountPerPage);
+
+        let numPages: number = Math.ceil(totalItems / itemsCountPerPage);
         return numPages;
     }
 }
