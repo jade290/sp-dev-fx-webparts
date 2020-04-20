@@ -60,7 +60,7 @@ export class EventCard extends React.Component<IEventCardProps, IEventCardState>
                                 />
                             </div>
                             <div className={styles.detailsContainer}>
-                                <div className={styles.category}>{category}</div>
+                                {/* <div className={styles.category}>{category}</div> */}
                                 <div className={styles.title} data-automation-id="event-card-title">{title}</div>
                                 <div className={styles.datetime}>{dateString}</div>
                                 <div className={styles.location}>{location}</div>
@@ -111,6 +111,49 @@ export class EventCard extends React.Component<IEventCardProps, IEventCardState>
                                 startDate={start}
                                 endDate={end}
                                 size={DateBoxSize.Small}
+                            />
+                        </div>
+                        <div>
+                            <div className={styles.title} data-automation-id="event-card-title">{title}</div>
+                            <div className={styles.datetime}>{dateString}</div>
+                        </div>
+                    </DocumentCard>
+                </div>
+            </div>
+        );
+    }
+
+    private _renderSuperSmallCell(): JSX.Element {
+        const { start,
+            end,
+            allDay,
+            title,
+            url,
+            // category,
+            // location
+          } = this.props.event;
+        const eventDate: moment.Moment = moment(start);
+        const dateString: string = allDay ? eventDate.format(strings.AllDayDateFormat) : eventDate.format(strings.LocalizedTimeFormat);
+        return (
+            <div>
+                <div
+                    className={css(styles.cardWrapper, styles.compactCard, styles.root, styles.rootIsCompact)}
+                    data-is-focusable={true}
+                    data-is-focus-item={true}
+                    role="listitem"
+                    aria-label={Text.format(strings.EventCardWrapperArialLabel, title, dateString)}
+                >
+                    <DocumentCard
+                        className={css(styles.root, styles.rootIsActionable, styles.rootIsCompact)}
+                        type={DocumentCardType.compact}
+                        onClickHref={url}
+                    >
+                        <div data-automation-id="normal-card-preview">
+                            <DateBox
+                                className={styles.dateBox}
+                                startDate={start}
+                                endDate={end}
+                                size={DateBoxSize.SuperSmall}
                             />
                         </div>
                         <div>

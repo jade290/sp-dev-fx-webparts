@@ -32,10 +32,17 @@
   align-items: baseline;
 }
 
-.seeAll {
+.seeAll a {
   white-space: nowrap;
   margin-left: auto;
+  padding-left: 100px;
   position: relative;
+  text-decoration: none;
+  color:Black;
+  outline: none;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", 
+  -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-weight: 600;
 }
 
 .content {

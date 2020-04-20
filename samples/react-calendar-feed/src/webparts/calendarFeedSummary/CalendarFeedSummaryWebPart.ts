@@ -260,7 +260,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
                 PropertyFieldSliderWithCallout("cacheDuration", {
                   calloutContent: React.createElement("div", {}, strings.CacheDurationFieldCallout),
                   calloutTrigger: CalloutTriggers.Hover,
-                  calloutWidth: 200,
+                  calloutWidth: 25,
                   key: "cacheDurationFieldId",
                   label: strings.CacheDurationFieldLabel,
                   max: 1440,
@@ -324,15 +324,19 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
   //Token expires in less than 24 hours so lets get a new one with each request
   // Access is denied, this method does not work
   private getAuthToken(): Promise<HttpClientResponse> {
-    //const postURL = "https://cors-anywhere.herokuapp.com/" + "http://accounts.accesscontrol.windows.net/"+ tenantId +"/OAuth/2";
-    const postURL = "https://accounts.accesscontrol.windows.net/23d0b6b0-36e1-4c9d-98fa-9c2366c8cfe5/tokens/OAuth/2";
+    //const postURL = "https://cors-anywhere.herokuapp.com/" + "http://accounts.accesscontrol.windows.net/"+ 
+    //  strings.TenantId +"/OAuth/2";
+    const postURL = "https://accounts.accesscontrol.windows.net/" + strings.TenantId +"/tokens/OAuth/2";
 
     const requestHeaders: Headers = new Headers();
     requestHeaders.append('Content-type', 'application/x-www-form-urlencoded');
     requestHeaders.append('grant_type', "client_credentials");
-    requestHeaders.append('resource', '00000003-0000-0ff1-ce00-000000000000/avoratech.sharepoint.com@' + strings.ClientId);
+    requestHeaders.append('resource', strings.ApplicationPrincipalId +'/' + strings.ShortSite + 
+      '@' + strings.TenantId);
     requestHeaders.append('client_id', strings.ClientId + "@" + strings.TenantId);
     requestHeaders.append('client_secret', strings.ClientSecret);
+    requestHeaders.append('Referer', strings.Site);
+    requestHeaders.append("X-FORMS_BASED_AUTH_ACCEPTED", "f");
     const httpClientOptions: IHttpClientOptions = {
       headers: requestHeaders
     };
@@ -351,8 +355,9 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
   }
 
   private getEventsListRestApi(): Promise<HttpClientResponse> {
+    this.getAuthToken();
     const postURL = strings.Site + "_api/web/lists";
-    const token = strings.Token; //"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvYXZvcmF0ZWNoLnNoYXJlcG9pbnQuY29tQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsImlzcyI6IjAwMDAwMDAxLTAwMDAtMDAwMC1jMDAwLTAwMDAwMDAwMDAwMEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJpYXQiOjE1ODU5NTkxNzcsIm5iZiI6MTU4NTk1OTE3NywiZXhwIjoxNTg1OTg4Mjc3LCJpZGVudGl0eXByb3ZpZGVyIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDIzZDBiNmIwLTM2ZTEtNGM5ZC05OGZhLTljMjM2NmM4Y2ZlNSIsIm5hbWVpZCI6IjZhMjE1NGFmLTY1MzEtNDUyOC05NzhiLTZiYjA2OTAyYzgzOEAyM2QwYjZiMC0zNmUxLTRjOWQtOThmYS05YzIzNjZjOGNmZTUiLCJvaWQiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJzdWIiOiI0NDNhZjRmZC0yOTMyLTQzZDItOGVjNS1mZDA3ZWZlODZlZDIiLCJ0cnVzdGVkZm9yZGVsZWdhdGlvbiI6ImZhbHNlIn0.e39hOKZhyxasv0YXaa0HQHfA0g_wrVw5XaAI1IEDc5QnBq7CWeHsKr4hewixUqEArpFLYAtaKvaQlPOdzZHymwx7cp11EpOzVBKsBKBIDeQs3So8HKelIzBKXziXegG6iShdxQa5TrfAgFPF1miPfZrutTBfCd0BDjCCfHlht80dZZgKzMsUEtQbVDCcuCxl6Ubj5d3Eo7_Pmy6F6NHirQLxtKKD8aOpd2XDrFe9QANX8NLCSwtmwvR3PEAxtBt16lajCX5KFpcoDHBzkmobFvIlmabj5tlfEMy3RVYaFM5EjxY_4RBvB6v9901R7suba9Q8YSvUHWh0M_UBZUG0sA";
+    const token = strings.Token;
     const requestHeaders: Headers = new Headers();
     requestHeaders.append('Content-type', 'application/json');
     //For an OAuth token
@@ -376,7 +381,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
       });
   }
   protected getSiteEventLists = async (): Promise<IPropertyPaneDropdownOption[]> => {
-    this.properties.feedUrl = "https://test.com";
+    this.properties.feedUrl = document.location.host;
     let data = await this.getEventsListRestApi();
     if (data) {
       let data2 = Object.create(data);

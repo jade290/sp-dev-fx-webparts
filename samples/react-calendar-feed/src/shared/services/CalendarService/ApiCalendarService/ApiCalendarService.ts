@@ -116,7 +116,6 @@ export class ApiCalendarService extends BaseCalendarService
     let data = await this.fetchJsonResponse(webRoot + listUrl);
     if (data) {
       let data2 = Object.create(data);
-      console.log("Title: " + data2.d.results[0].Title);
 
       // Open the web associated to the site
       let web = new Web(siteUrl);
@@ -125,7 +124,6 @@ export class ApiCalendarService extends BaseCalendarService
 
         // Once we get the list, convert to calendar events
         let events: ICalendarEvent[] = data2.d.results.map((item: any) => {
-          //let eventUrl: string = combine(strings.Site, "Lists/SharePoint%20Calendar/DispForm.aspx?ID=" + item.Id);
           let eventUrl: string = combine(strings.Site, "Lists/"+ strings.ListName  +"/DispForm.aspx?ID=" + item.Id);
           const eventItem: ICalendarEvent = {
             title: item.Title,
@@ -139,10 +137,16 @@ export class ApiCalendarService extends BaseCalendarService
           };
           return eventItem; 
         });
+
+        if(strings.Site.includes("guidewell")) {
+          events = events.filter((item: any) =>
+          item.category == "Show on Homepage");
+        }
+
         // Build a filter so that we don't retrieve every single thing unless necesssary
           events = events.filter((item: any) =>
             new Date(item.start).getTime() >= this.EventRange.Start.getTime() && 
-            new Date(item.start).getTime() <= this.EventRange.End.getTime());
+            new Date(item.start).getTime() <= this.EventRange.End.getTime()); 
 
         // Sort the events by start date time
           events = events.sort((item: any, item2: any) =>

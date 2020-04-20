@@ -31,8 +31,8 @@
         "convertFromUTC": false,
         "hideShowSeeAllLink": false,
         "hideShowPreviousNextButtons": false,
-        "seeAllLinkText": "See All",
-        "seeAllLinkUrl": ""
+        "seeAllLinkText": "See All Events",
+        "seeAllLinkUrl": "https://guidewell.sharepoint.com/sites/GWNews/Lists/Events/MyItems.aspx"
       }
   }]
 }

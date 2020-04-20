@@ -11,7 +11,7 @@ import styles from "./FilmstripLayout.module.scss";
 
 /**
  * Filmstrip layout
- * Presents the child compoments as a slick slide
+ * Presents the child components as a slick slide
  */
 export class FilmstripLayout extends React.Component<
   IFilmstripLayoutProps,

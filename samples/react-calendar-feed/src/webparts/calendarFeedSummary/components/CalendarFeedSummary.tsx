@@ -80,8 +80,6 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
     console.log("prevProvider.SiteEventListsDdlChoice: " +prevProvider.SiteEventListsDdlChoice);
     console.log("currProvider.SiteEventListsDdlChoice: " +currProvider.SiteEventListsDdlChoice);
 
-    //this.props.seeAllLinkUrl = "https://avoratech.sharepoint.com/sites/AvoraCommunity/Lists/SharePoint%20Calendar/AllItems.aspx";
-  
     const settingsHaveChanged: boolean = prevProvider.CacheDuration !== currProvider.CacheDuration ||
       prevProvider.Name !== currProvider.Name ||
       prevProvider.FeedUrl !== currProvider.FeedUrl ||
@@ -121,6 +119,13 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
         onConfigure={this._onConfigure} />;
     }
 
+    let url = "";
+    if(strings.Site.includes("guidewell")) {
+      url = strings.Site + "Lists/"+ strings.ListName +"/MyItems.aspx?&Category=Show%20on%20Homepage";
+    } else {
+      url = strings.Site + "Lists/"+ strings.ListName +"/MyItems.aspx";
+    }
+
     // we're configured, let's show stuff
 
     // put everything together in a nice little calendar view
@@ -131,8 +136,9 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
             title={this.props.title}
             updateProperty={this.props.updateProperty}
           />
-            <div className={css(styles.seeAll, "col-md-6")}>
-              <a href={strings.Site + "_layouts/15/"+ strings.ListName +".aspx"}>{this.props.seeAllLinkText}</a>
+            <div className={css(styles.seeAll)}>
+              {/* <a href={strings.Site + "/Lists/"+ strings.ListName +"/MyItems.aspx"}>{this.props.seeAllLinkText}</a> */}
+              <a href={url}>{this.props.seeAllLinkText}</a>
             </div>
         </div>
         <div className={styles.content}>
