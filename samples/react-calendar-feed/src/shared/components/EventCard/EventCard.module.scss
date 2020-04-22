@@ -14,7 +14,7 @@
   align-items: center;
   padding: 2px !important;
   border: none;
-  height: 68px;
+  height: 34px;
   margin-bottom: 12px;
 }
 
@@ -41,9 +41,13 @@
   margin-bottom: 4px;
 }
 
+.normalCard .seeAll {
+  padding-left: 300px;
+}
+
 .compactCard .dateBox {
-  margin: auto 14px auto 0;
-  min-width: 64px;
+  margin: auto 8px auto 0;
+  min-width: 32px;
 }
 
 [dir=rtl] .compactCard .dateBox {
@@ -55,11 +59,11 @@
 }
 
 .compactCard .title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   margin: 0 0 3px;
   max-height: 38px;
-  line-height: 19px;
+  line-height: 20px;
 }
 
 .category,
@@ -115,7 +119,7 @@
     border: 1px solid #eaeaea;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    max-width: 320px;
+    max-width: 220px;
     min-width: 206px;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -128,8 +132,8 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  max-width: 480px;
-  height: 68px;
+  max-width: 380px;
+  height: 34px;
   border: 1px solid transparent;
 }
 

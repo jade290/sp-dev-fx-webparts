@@ -35,6 +35,11 @@
 }
 
 .boxIsSmall .date {
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.boxIsSuperSmall .date {
   font-size: 10px;
   font-weight: 600;
 }
@@ -82,6 +87,20 @@
 }
 
 .box.boxIsSmall {
+  height: 31px;
+  width: 31px;
+
+  .month {
+    font-size: 8px;
+    font-weight: 400;
+  }
+
+  .day {
+    font-size: 14px;
+  }
+}
+
+.box.boxIsSuperSmall {
   height: 62px;
   width: 62px;
 
@@ -117,8 +136,13 @@
 }
 
 .boxIsSmall .separator {
+  width: 16px;
+}
+
+.boxIsSuperSmall .separator {
   width: 31px;
 }
+
 
 .boxIsMedium .separator {
   width: 40px;

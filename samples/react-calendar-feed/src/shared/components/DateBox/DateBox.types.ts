@@ -10,6 +10,7 @@ export interface IDateBoxState {
 }
 
 export enum DateBoxSize {
+    SuperSmall,
     Small,
     Medium
 }
