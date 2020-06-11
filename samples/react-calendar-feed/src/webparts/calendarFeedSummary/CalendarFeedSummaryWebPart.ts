@@ -1,3 +1,4 @@
+import '@pnp/polyfill-ie11';
 import * as React from "react";
 import * as ReactDom from "react-dom";
 
@@ -23,7 +24,7 @@ import { PropertyFieldToggleWithCallout } from "@pnp/spfx-property-controls/lib/
 
 // Localization
 import * as strings from "CalendarFeedSummaryWebPartStrings";
-import { HttpClient, IHttpClientOptions, HttpClientResponse } from "@microsoft/sp-http";
+import { HttpClient, IHttpClientOptions, HttpClientResponse, SPHttpClient } from "@microsoft/sp-http";
 
 // Calendar services
 import { CalendarEventRange, DateRange, ICalendarService, ISharePointList } from "../../shared/services/CalendarService";
@@ -35,31 +36,34 @@ import { ICalendarFeedSummaryWebPartProps } from "./CalendarFeedSummaryWebPart.t
 // Calendar Feed Summary component
 import CalendarFeedSummary from "./components/CalendarFeedSummary";
 import { ICalendarFeedSummaryProps } from "./components/CalendarFeedSummary.types";
+
 // this is the same width that the SharePoint events web parts use to render as narrow
 const MaxMobileWidth: number = 480;
-
 /**
  * Calendar Feed Summary Web Part
  * This web part shows a summary of events, in a film-strip (for normal views) or list view (for narrow views)
  * It is called a summary web part because it doesn't allow the user to filter events.
  */
+
 export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<ICalendarFeedSummaryWebPartProps> {
   // the list of proviers available
   private _providerList: any[];
 
   constructor() {
     super();
-
     // get the list of providers so that we can offer it to users
     this._providerList = CalendarServiceProviderList.getProviders();
   }
 
-  siteCalendarLists = [];
-
+  private siteCalendarLists = [];
   protected onInit(): Promise<void> {
+    // sp.setup({
+    //   ie11: true,
+    //   spfxContext : this.context
+    // });
+
     return new Promise<void>((resolve, _reject) => {
       this.getSiteEventLists();
-
       let {
         cacheDuration,
         dateRange,
@@ -93,6 +97,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
   /**
    * Renders the web part
    */
+
   public render(): void {
     // see if we need to render a mobile view
     const isNarrow: boolean = this.domElement.clientWidth <= MaxMobileWidth;
@@ -111,6 +116,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
         updateProperty: (value: string) => {
           this.properties.title = value;
         },
+
         seeAllLinkText: this.properties.seeAllLinkText,
         seeAllLinkUrl: this.properties.seeAllLinkUrl,
       }
@@ -132,12 +138,10 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
    * Show the configuration pane
    */
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-
     // create a drop down of feed providers from our list
     const feedTypeOptions: IPropertyPaneDropdownOption[] = this._providerList.map(provider => {
       return { key: provider.key, text: provider.label };
     });
-
 
     const {
       feedUrl,
@@ -169,13 +173,14 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
                   label: strings.FeedTypeFieldLabel,
                   options: feedTypeOptions
                 }),
+
                 // feed url input box -- only if not using a mock provider
+
                 !isMock && !isAPI && PropertyFieldTextWithCallout("feedUrl", {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: "feedUrlFieldId",
                   label: strings.FeedUrlFieldLabel,
-                  calloutContent:
-                    React.createElement("div", {}, strings.FeedUrlCallout),
+                  calloutContent: React.createElement("div", {}, strings.FeedUrlCallout),
                   calloutWidth: 200,
                   value: feedUrl,
                   placeholder: "https://",
@@ -225,6 +230,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
             //     }),
             //   ]
             // },
+
             // advanced group
             {
               groupName: strings.AdvancedGroupName,
@@ -233,6 +239,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
                 PropertyPaneLabel('convertFromUTC', {
                   text: strings.ConvertFromUTCFieldDescription
                 }),
+
                 // Convert from UTC toggle
                 PropertyPaneToggle("convertFromUTC", {
                   key: "convertFromUTCFieldId",
@@ -304,14 +311,13 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
 
   /**
      * Returns the data version
-     */
+  */
   protected get dataVersion(): Version {
     return Version.parse('2.0');
   }
-  
+
   private getsiteEventListsDdlCalloutContent(): JSX.Element {
     const selectedKey: string = this.properties.siteEventListsDdlChoice;
-  
     if (selectedKey) {
       console.log("selectedKey: " + selectedKey);
       return React.createElement('div', {}, `you have selected ${selectedKey}`);
@@ -321,65 +327,23 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
     }
   }
 
-  //Token expires in less than 24 hours so lets get a new one with each request
-  // Access is denied, this method does not work
-  private getAuthToken(): Promise<HttpClientResponse> {
-    //const postURL = "https://cors-anywhere.herokuapp.com/" + "http://accounts.accesscontrol.windows.net/"+ 
-    //  strings.TenantId +"/OAuth/2";
-    const postURL = "https://accounts.accesscontrol.windows.net/" + strings.TenantId +"/tokens/OAuth/2";
-
-    const requestHeaders: Headers = new Headers();
-    requestHeaders.append('Content-type', 'application/x-www-form-urlencoded');
-    requestHeaders.append('grant_type', "client_credentials");
-    requestHeaders.append('resource', strings.ApplicationPrincipalId +'/' + strings.ShortSite + 
-      '@' + strings.TenantId);
-    requestHeaders.append('client_id', strings.ClientId + "@" + strings.TenantId);
-    requestHeaders.append('client_secret', strings.ClientSecret);
-    requestHeaders.append('Referer', strings.Site);
-    requestHeaders.append("X-FORMS_BASED_AUTH_ACCEPTED", "f");
-    const httpClientOptions: IHttpClientOptions = {
-      headers: requestHeaders
-    };
-
-    console.log("About to make token request.");
-
-    return this.context.httpClient.post(
-      postURL,
-      HttpClient.configurations.v1,
-      httpClientOptions)
-      .then((response) => {
-        console.log("REST API response received.");
-        console.log("Token Orgi: " + response.json);
-        return response;
-      });
-  }
-
   private getEventsListRestApi(): Promise<HttpClientResponse> {
-    this.getAuthToken();
-    const postURL = strings.Site + "_api/web/lists";
-    const token = strings.Token;
+    const getURL = strings.Site + "_api/web/lists";
+    console.log("Make REST API request to get all Event Lists...");
     const requestHeaders: Headers = new Headers();
-    requestHeaders.append('Content-type', 'application/json');
-    //For an OAuth token
-    requestHeaders.append('Authorization', token);
     requestHeaders.append('Accept', 'application/json;odata=verbose');
-
-    const httpClientOptions: IHttpClientOptions = {
-      headers: requestHeaders
-    };
-
-    console.log("About to make REST API request.");
+    const httpClientOptions: IHttpClientOptions = { headers: requestHeaders};
 
     return this.context.httpClient.get(
-      postURL,
-      HttpClient.configurations.v1,
-      httpClientOptions)
+      getURL,
+      HttpClient.configurations.v1, httpClientOptions)
       .then((response) => {
         console.log("REST API response received.");
         console.log(response.json);
         return response.json();
       });
   }
+
   protected getSiteEventLists = async (): Promise<IPropertyPaneDropdownOption[]> => {
     this.properties.feedUrl = document.location.host;
     let data = await this.getEventsListRestApi();
@@ -388,16 +352,6 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
       console.log("Title: " + data2.d.results[0].Title);
 
       try {
-
-        // Once we get the array, convert to calendar lists
-        //  let data3: IPropertyPaneDropdownOption[] = data2.d.results.map((item: any) => {
-        //   const eventItem: IPropertyPaneDropdownOption = {
-        //     text: item.Title,
-        //     key: item.Id
-        //   };
-        //   return eventItem;
-        // });
-
         let data3 = new Array();
         data2.d.results.forEach(element => {
           if(element.Id && element.__metadata && element.__metadata.type && element.__metadata.type == "SP.List"){
@@ -415,7 +369,6 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
          throw error;
        }
     }
-    //return data;
   }
 
   /**
@@ -429,18 +382,18 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
       && feedType !== undefined || 
       siteEventListsDdlChoice !== null && siteEventListsDdlChoice !== undefined;
 
-    // Mock feeds don't need anything else
+      // Mock feeds don't need anything else
     if (feedType === CalendarServiceProviderType.Mock) {
       return true;
   }
 
-    // see if web part has a feed url configured
+  // see if web part has a feed url configured
   const hasFeedUrl: boolean = feedUrl !== null
     && feedUrl !== undefined
     && feedUrl !== "";
 
-
     // if we have a feed url and a feed type, we are configured
+
     return hasFeedUrl && hasFeedType;
   }
 
@@ -451,7 +404,8 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
   private _validateFeedUrl(feedUrl: string): string {
     if (this.properties.feedType === CalendarServiceProviderType.Mock || 
         this.properties.feedType === CalendarServiceProviderType.API) {
-      // we don't need a URL for mock feeds or API
+
+          // we don't need a URL for mock feeds or API
       return '';
     }
 
@@ -505,7 +459,7 @@ export default class CalendarFeedSummaryWebPart extends BaseClientSideWebPart<IC
     provider.MaxTotal = maxTotal;
     provider.SiteEventListsDdlChoice = siteEventListsDdlChoice;
     // provider.HideShowPreviousNextButtons = hideShowPreviousNextButtons;
+
     return provider;
   }
-
 }
