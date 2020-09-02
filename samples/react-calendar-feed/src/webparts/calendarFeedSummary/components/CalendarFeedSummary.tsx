@@ -221,25 +221,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
         }
         break;
       default:
-        // specific provider messages
-        if (provider.Name === CalendarServiceProviderType.RSS) {
-          switch (error) {
-            case "No result":
-              errorMsg = strings.ErrorRssNoResult;
-              break;
-            case "No root":
-              errorMsg = strings.ErrorRssNoRoot;
-              break;
-            case "No channel":
-              errorMsg = strings.ErrorRssNoChannel;
-              break;
-          }
-        } else if (provider.Name === CalendarServiceProviderType.iCal &&
-          error.indexOf("Unable to get property 'property' of undefined or null reference") !== -1) {
-          errorMsg = strings.ErrorInvalidiCalFeed;
-        } else if (provider.Name === CalendarServiceProviderType.WordPress && error.indexOf("Failed to read") !== -1) {
-          errorMsg = strings.ErrorInvalidWordPressFeed;
-        }
+
     }
 
     return (<div className={styles.errorMessage} >
@@ -272,7 +254,7 @@ export default class CalendarFeedSummary extends React.Component<ICalendarFeedSu
       const pageEndAt: number = (maxEvents * currentPage);
 
       pagedEvents = events.slice(pageStartAt, pageEndAt);
-      usePaging = true;
+      usePaging = false;
     }
 
     return (<FocusZone

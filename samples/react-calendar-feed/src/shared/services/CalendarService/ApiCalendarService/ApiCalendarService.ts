@@ -2,7 +2,6 @@
  * ExtensionService
  */
 
-import '@pnp/polyfill-ie11';
 import { HttpClient, IHttpClientOptions, HttpClientResponse } from "@microsoft/sp-http";
 import { ICalendarService } from "..";
 import { BaseCalendarService } from "../BaseCalendarService";

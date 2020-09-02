@@ -1,4 +1,3 @@
-import '@pnp/polyfill-ie11';
 import * as React from "react";
 import * as ReactDom from "react-dom";
 
@@ -36,6 +35,15 @@ import { ICalendarFeedSummaryWebPartProps } from "./CalendarFeedSummaryWebPart.t
 // Calendar Feed Summary component
 import CalendarFeedSummary from "./components/CalendarFeedSummary";
 import { ICalendarFeedSummaryProps } from "./components/CalendarFeedSummary.types";
+
+// IE 11 Hopefuls
+// import 'element-closest/browser';
+// import "core-js/es6/array";
+// import "es6-map/implement";
+// import "core-js/modules/es6.array.find";
+import "@pnp/polyfill-ie11";
+
+// import {sp} from '@pnp/sp';
 
 // this is the same width that the SharePoint events web parts use to render as narrow
 const MaxMobileWidth: number = 480;
